@@ -1,0 +1,32 @@
+#begin, #end {
+    display: inline;
+}
+
+#endText, #end{
+    display: inline;
+}
+
+#end{
+    position: absolute;
+    right: 10px;
+}
+
+#endText{
+    position: relative;
+    right: 5px;
+}
+
+#beginText, #begin{
+    display: inline;
+}
+
+#beginText{
+    position: relative;
+    right: 5px;
+}
+
+#begin{
+    position: relative;
+    left: 15px;
+}
+

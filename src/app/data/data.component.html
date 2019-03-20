@@ -1,0 +1,16 @@
+<h1> Gegevens van {{naam}} </h1>
+<link href="https://rawgit.com/angular/material2-builds/master/prebuilt-themes/indigo-pink.css" rel="stylesheet">
+<br>
+<div id="begin">
+  <p id="beginText">Begin datum</p>
+  <input matInput [min]="minDate" [max]="maxDate" matInput [matDatepicker]="picker" placeholder="Choose date">
+  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+</div>
+
+<div id="end">
+  <p id="endText">Eind datum</p>
+  <input matInput [min]="minDate" [max]="maxDate" matInput [matDatepicker]="picker2" placeholder="Choose date">
+  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+  <mat-datepicker #picker2></mat-datepicker>
+</div>
