@@ -11,6 +11,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { DataComponent } from './data/data.component';
 import { MatDatepickerModule, MatNativeDateModule, MatInputModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { HttpClientModule } from '@angular/common/http'
+import { NgxGaugeModule } from 'ngx-gauge';
+
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
@@ -26,11 +29,12 @@ const appRoutes: Routes = [
     FooterComponent,
     NavbarComponent,
     RegisterComponent,
-    DataComponent
+    DataComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    NgxGaugeModule,
     RouterModule.forRoot(
       appRoutes
     ),
@@ -39,7 +43,8 @@ const appRoutes: Routes = [
     MatInputModule,
     FormsModule,
     BrowserAnimationsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   exports: [
     MatDatepickerModule

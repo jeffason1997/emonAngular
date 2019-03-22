@@ -14,3 +14,21 @@
   <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
   <mat-datepicker #picker2></mat-datepicker>
 </div>
+
+<br><br><br>
+<button (click)="OnClickMe()">Get Data</button>
+<ngx-gauge [type]="gaugeType" 
+           [value]="gaugeValue" 
+           [label]="gaugeLabel"  
+           [append]="gaugeAppendText"
+           [min]="0"
+           [max]="5000">
+</ngx-gauge>
+
+<ngx-gauge [type]="gaugeType" 
+           [value]="opleverValue" 
+           [label]="opleverLabel"  
+           [append]="gaugeAppendText"
+           [min]="0"
+           [max]="5000">
+</ngx-gauge>
