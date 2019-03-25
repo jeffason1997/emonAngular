@@ -7,9 +7,9 @@ import { LoginComponent } from './login/login.component';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { RegisterComponent } from './register/register.component';
-import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DataComponent } from './data/data.component';
-import { MatDatepickerModule, MatNativeDateModule, MatInputModule } from '@angular/material';
+import { MatDatepickerModule, MatNativeDateModule, MatInputModule, MatTabsModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { NgxGaugeModule } from 'ngx-gauge';
@@ -34,7 +34,8 @@ const appRoutes: Routes = [
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NgxGaugeModule,
+    NgxGaugeModule, 
+    MatTabsModule,
     RouterModule.forRoot(
       appRoutes
     ),

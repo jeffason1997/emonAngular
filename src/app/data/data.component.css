@@ -1,32 +1,36 @@
 #begin, #end {
+    display: inline-block;
+    text-align: center;
+    margin: 25px;
+}
+
+#beginText, #beginPicker{
     display: inline;
+    margin: 10px;
 }
 
-#endText, #end{
+#endText, #endPicker{
     display: inline;
+    margin: 10px;
 }
 
-#end{
-    position: absolute;
-    right: 10px;
+#verbruikGauge, #opleveringGauge{
+    display: inline-block;
+    margin-left: 50px;
+    margin-right: 50px;
 }
 
-#endText{
-    position: relative;
-    right: 5px;
+#gauges{
+    display: table;
+    margin: 0 auto;
 }
 
-#beginText, #begin{
-    display: inline;
+#dates {
+    display: table;
+    margin: 0 auto;
 }
 
-#beginText{
-    position: relative;
-    right: 5px;
+#tabs {
+    display: table;
+    margin: 0 auto;
 }
-
-#begin{
-    position: relative;
-    left: 15px;
-}
-
