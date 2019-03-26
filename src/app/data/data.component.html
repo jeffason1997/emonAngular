@@ -24,19 +24,13 @@
     <mat-datepicker #endPicker></mat-datepicker>
   </span>
 </span>
-
-<mat-tab-group id="tabs">
-  <mat-tab label="Uur">
-    <div *ngIf="chart">
-      <canvas id="canvas">{{ chart }}</canvas>
-    </div>
-  </mat-tab>
+<mat-tab-group id="tabs" (selectedTabChange)="yourFn($event)" animationDuration="0ms">
+  <mat-tab label="Minuut">  </mat-tab>
+  <mat-tab label="Uur"></mat-tab>
   <mat-tab label="Dag"></mat-tab>
   <mat-tab label="Maand"></mat-tab>
-  <mat-tab label="Jaar"></mat-tab>
 </mat-tab-group>
-
-
-
-<br><br>
-<button (click)="OnClickMe()">Get Data</button>
+<div *ngIf="chart">
+  <canvas id="canvas">{{ chart }}</canvas>
+</div>
+<button id="buttonYO" (click)="OnClickMe()">Get Data</button>

@@ -1,7 +1,7 @@
 export class dateformatter {
 
 dateFormat(date){
-    return this.formatDate(date, "H:mm d-MM-yyyy",1);
+    return this.formatDate(date, "H:mm:ss d-MM-yyyy",1);
 }
 
 private formatDate(date, format, utc) {
@@ -10,7 +10,7 @@ private formatDate(date, format, utc) {
     var dddd = ["\x02", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     var ddd = ["\x03", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
   
-    function ii(i, len) {
+    function ii(i, len = 2) {
       var s = i + "";
       len = len || 2;
       while (s.length < len) s = "0" + s;
