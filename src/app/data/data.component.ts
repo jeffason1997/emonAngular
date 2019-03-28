@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { interval } from 'rxjs';
+import { interval, empty } from 'rxjs';
 import { Chart } from 'chart.js';
-import { dateformatter } from '../logic/dateformatter';
-
 @Component({
   selector: 'app-data',
   templateUrl: './data.component.html',
@@ -12,52 +10,20 @@ import { dateformatter } from '../logic/dateformatter';
 
 export class DataComponent implements OnInit {
   naam = 'Jeffrey';
-  apiURL: string = 'http://188.166.112.138:420/api';
+  apiURL: string = 'http://localhost:420/api';
   minDate = new Date(2019, 0, 1);
   maxDate = new Date();
   gebruikt = [];
   opgeleverd = [];
   alldates = [];
-  chart = new Chart('canvas', {
-    type: 'line',
-    data: {
-      labels: this.alldates,
-      datasets: [
-        {
-          label: "Gebruikt",
-          data: this.gebruikt,
-          borderColor: "#3cba0f",
-          fill: false
-        },
-        {
-          label: "Opgeleverd",
-          data: this.opgeleverd,
-          borderColor: "#ffcc00",
-          fill: false
-        },
-      ]
-    },
-    options: {
-
-      scales: {
-        xAxes: [{
-          display: true
-        }],
-        yAxes: [{
-          display: true
-        }],
-      },
-      elements: {
-        point: {
-          radius: 1
-        }
-      }
-    }
-  });
-
-  dateformatter = new dateformatter();
+  chart = new Chart("canvas");
+  beginDate = this.minDate;
+  endDate = this.maxDate;
   gaugeValue = 0;
   opleverValue = 0;
+  totaalVerbruik = 0;
+  kostenPer = 0.23;
+  totaleKosten = 0;
   tab = "Minuut";
 
   constructor(private httpClient: HttpClient) {
@@ -70,13 +36,13 @@ export class DataComponent implements OnInit {
     let sub = interval(10000).subscribe((val) => this.getLatest());
   }
 
-  yourFn($event) {
-    this.tab = $event.tab.textLabel;
-
-    this.getDate();
+  yourFn(event) {
+    this.tab = event.tab.textLabel;
+    this.getDate(`sort=${this.tab}`);
   }
 
-  OnClickMe() {
+  CreateChart() {
+    this.chart.destroy();
     this.chart = new Chart('canvas', {
       type: 'line',
       data: {
@@ -84,20 +50,24 @@ export class DataComponent implements OnInit {
         datasets: [
           {
             label: "Gebruikt",
+            borderColor: "#3e95cd",
             data: this.gebruikt,
-            borderColor: "#3cba0f",
             fill: false
           },
           {
             label: "Opgeleverd",
+            borderColor: "#8e5ea2",
             data: this.opgeleverd,
-            borderColor: "#ffcc00",
             fill: false
           },
         ]
       },
       options: {
-
+        animation: false,
+        title: {
+          display: true,
+          text: `Gemiddeld verbruik per ${this.tab.toLowerCase()} in kWh`
+        },
         scales: {
           xAxes: [{
             display: true
@@ -111,83 +81,53 @@ export class DataComponent implements OnInit {
             radius: 1
           }
         }
-      }});
-    }
+      }
+    });
+  }
 
-  getLatest() {  //TODO: add right API call when API is up to date
+  onResize(event) {
+    this.CreateChart();
+  }
 
-    this.httpClient.get<Object[]>(this.apiURL + '/newEnergie').subscribe((data => {
-      this.gaugeValue = data[data.length - 1]["verbruik"];
-      this.opleverValue = data[data.length - 1]["opgeleverd"];
+  BeginDateChange(event) {
+    this.beginDate = event.value;
+    console.log(event.value);
+  }
+
+  EndDateChange(event) {
+    this.endDate = event.value;
+    console.log(event.value);
+  }
+
+  OnClickMe() {
+    this.getDate(`begin=${this.beginDate.toString("dd-MM-YY")}&eind=${this.endDate}&sort=${this.tab}`);
+    console.log("ghettt");
+  }
+
+
+  getLatest() {
+    this.httpClient.get<Object[]>(this.apiURL + '/newEnergie/4530303035303031363930323834393134').subscribe((data => {
+      this.gaugeValue = data[0]["verbruik"];
+      this.opleverValue = data[0]["opgeleverd"];
+      this.totaalVerbruik = Math.round((data[0]["opgenomen_tarief_1"] + data[0]["opgenomen_tarief_2"]) * 100) / 100;
+      this.totaleKosten = Math.round((this.totaalVerbruik * this.kostenPer) * 100) / 100;
     }));
   }
 
-  getDate() {
-        this.httpClient.get<object[]>(this.apiURL + '/energie').subscribe((data => {
-          this.sorting(data);
-        }));
-
-      }
-
-  sorting(data) {
-        this.gebruikt = [];
-        this.opgeleverd = [];
-        this.alldates = [];
-        let date = new Date(data[0]["tijdstip"]);
-        this.alldates.push(this.dateformatter.dateFormat(date));
-        let tempData =[];
-        console.log(data);
-
-        data.forEach((dat, index, array) => {
-
-          let tempDate = new Date(dat["tijdstip"]);
-          if (this.sortingTime(tempDate, date) && index !== array.length - 1) {
-            tempData.push(dat);
-          } else if (!this.alldates.includes(this.dateformatter.dateFormat(tempDate))) {
-            if (index === array.length - 1) console.log(dat);
-            if (this.alldates.length === 1) console.log(dat);
-
-            let tempArray = [];
-            tempArray.push((tempData.map(dat => dat["verbruik"])));
-            this.gebruikt.push(Math.round((tempArray["0"].reduce((old, add) => old + add, 0)) / tempArray["0"].length));
-
-            tempArray = [];
-            tempArray.push((tempData.map(dat => dat["opgeleverd"])));
-            this.opgeleverd.push(Math.round((tempArray["0"].reduce((old, add) => old + add, 0)) / tempArray["0"].length));
-
-            tempData = [];
-            tempArray = [];
-            tempData.push(dat);
-            if (index !== array.length - 1) this.alldates.push(this.dateformatter.dateFormat(tempDate));
-            date = tempDate;
-          }
-        });
-
-
-        this.chart.data.datasets["0"].data = this.gebruikt;
-        this.chart.data.datasets["1"].data = this.opgeleverd;
-        this.chart.data.labels = this.alldates;
-
-        console.log(this.chart.data.datasets["0"].data);
-        console.log(this.chart.data.datasets["1"].data);
-        console.log(this.chart.data.labels)
-
-
-    this.chart.update();
-      }
-
-  sortingTime(originalDate, compareDate) {
-        if(this.tab === "Minuut") {
-      return originalDate.getMinutes() === compareDate.getMinutes();
-    } else if (this.tab === "Uur") {
-      return originalDate.getHours() === compareDate.getHours();
-    } else if (this.tab === "Dag") {
-      return originalDate.getDay() === compareDate.getDay();
-    } else if (this.tab == "Maand") {
-      return originalDate.getMonth() === compareDate.getMonth();
-    } else {
-      return null;
-    }
+  getDate(vars = "") {
+    this.emptyArray();
+    this.httpClient.get<object[]>(this.apiURL + '/energie/4530303035303031363930323834393134?' + vars).subscribe((data => {
+      console.log(data);
+      data.map(row => this.gebruikt.push(row["CurrentTo"] / 1000));
+      data.map(row => this.opgeleverd.push(row["CurrentFrom"] / 1000));
+      data.map(row => this.alldates.push(row["Time"]));
+      this.CreateChart();
+    }));
   }
 
+  emptyArray() {
+    this.gebruikt = [];
+    this.opgeleverd = [];
+    this.alldates = [];
+  }
 }

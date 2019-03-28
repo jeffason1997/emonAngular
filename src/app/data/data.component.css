@@ -9,7 +9,7 @@
     margin: 10px;
 }
 
-#endText, #endPicker{
+#endText, #endPicker, #buttonYO{
     display: inline;
     margin: 10px;
 }
@@ -34,7 +34,10 @@
     display: table;
     margin: 0 auto;
 }
-
-#buttonYO{
-    margin: 10px;
+#canvasHolder{
+    height: 60%;
+    width: 80%;
+    display: table;
+    margin: 0 auto;
+    margin-bottom: 50px;
 }
