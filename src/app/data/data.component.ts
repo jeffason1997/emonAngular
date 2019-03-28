@@ -81,7 +81,7 @@ export class DataComponent implements OnInit {
   }
 
   getLatest() {  //TODO: add right API call when API is up to date
-    this.httpClient.get<Object[]>(this.apiURL + '/energie').subscribe((data => {
+    this.httpClient.get<Object[]>(this.apiURL + '/newEnergie').subscribe((data => {
       this.gaugeValue = data[data.length - 1]["verbruik"];
       this.opleverValue = data[data.length - 1]["opgeleverd"];
     }));
