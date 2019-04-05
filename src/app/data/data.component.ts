@@ -121,11 +121,7 @@ export class DataComponent implements OnInit {
   }
 
   OnClickMe() {
-<<<<<<< HEAD
-    console.log("ghettt");
-=======
     this.getDate(`begin=${this.beginDate}&eind=${this.endDate}&sort=${this.tab}`);
->>>>>>> c3b14562db0607f21a017cdbb411f8cf801996d1
   }
 
 
