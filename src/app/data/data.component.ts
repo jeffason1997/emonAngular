@@ -100,7 +100,6 @@ export class DataComponent implements OnInit {
   }
 
   OnClickMe() {
-    this.getDate(`begin=${this.beginDate.toString("dd-MM-YY")}&eind=${this.endDate}&sort=${this.tab}`);
     console.log("ghettt");
   }
 
