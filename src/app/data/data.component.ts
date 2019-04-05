@@ -10,13 +10,14 @@ import { Chart } from 'chart.js';
 
 export class DataComponent implements OnInit {
   naam = 'Jeffrey';
-  apiURL: string = 'http://localhost:420/api';
+  apiURL: string = 'http://188.166.112.138:420/api';
   minDate = new Date(2019, 0, 1);
   maxDate = new Date();
   gebruikt = [];
   opgeleverd = [];
   alldates = [];
   temperatuur = [];
+  tempTemperatuur = [];
   easyCounter = 0;
   chart = new Chart("canvas");
   beginDate = this.minDate;
@@ -26,14 +27,14 @@ export class DataComponent implements OnInit {
   totaalVerbruik = 0;
   kostenPer = 0.23;
   totaleKosten = 0;
-  tab = "Minuut";
+  tab = "Maand";
 
   constructor(private httpClient: HttpClient) {
 
   }
 
   ngOnInit() {
-    this.getDate();
+    this.getDate(`sort=${this.tab}`);
     this.getLatest();
     let sub = interval(10000).subscribe((val) => this.getLatest());
   }
@@ -143,10 +144,7 @@ export class DataComponent implements OnInit {
     }));
 
     this.httpClient.get<object[]>(this.apiURL + '/meting/202481593119718?' + vars).subscribe((data => {
-      for(let i = this.alldates.length - data.length; i >0;i--){
-        this.temperatuur.push(null);
-      }
-      data.map(row => this.temperatuur.push(row["InsideTemperature"]));
+      data.map(row => this.tempTemperatuur.push(row["InsideTemperature"]));
       console.log(this.temperatuur.length);
       this.updateChart();
     }))
@@ -157,13 +155,23 @@ export class DataComponent implements OnInit {
     this.opgeleverd = [];
     this.alldates = [];
     this.temperatuur = [];
+    this.tempTemperatuur = [];
   }
 
   updateChart() {
     if(this.easyCounter==1){
-      this.CreateChart();
       this.easyCounter=0;
       console.log(this.temperatuur.length + ' & ' + this.gebruikt.length);
+      for(let i = this.alldates.length - this.tempTemperatuur.length; i >0;i--){
+        this.temperatuur.push(null);
+      }
+      this.tempTemperatuur.map(row => this.temperatuur.push(row));
+      while(this.tempTemperatuur.length != this.temperatuur.length);{
+      console.log(this.tempTemperatuur.length);
+      console.log(this.temperatuur.length);
+      }
+      this.CreateChart();
+
     }else{
       this.easyCounter++;
     }
