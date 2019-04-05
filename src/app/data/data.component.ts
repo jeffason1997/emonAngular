@@ -9,9 +9,7 @@ import { Chart } from 'chart.js';
 })
 
 export class DataComponent implements OnInit {
-  naam = 'Jeffrey';
   apiURL: string = 'http://188.166.112.138:420/api';
-  minDate = new Date(2019, 0, 1);
   maxDate = new Date();
   gebruikt = [];
   opgeleverd = [];
@@ -20,28 +18,28 @@ export class DataComponent implements OnInit {
   tempTemperatuur = [];
   easyCounter = 0;
   chart = new Chart("canvas");
-  beginDate = this.minDate;
+  beginDate = new Date();
   endDate = this.maxDate;
   gaugeValue = 0;
   opleverValue = 0;
   totaalVerbruik = 0;
   kostenPer = 0.23;
   totaleKosten = 0;
-  tab = "Maand";
+  tab = "Minuut";
 
   constructor(private httpClient: HttpClient) {
 
+    this.getLatest();
   }
 
   ngOnInit() {
-    this.getDate(`sort=${this.tab}`);
-    this.getLatest();
-    let sub = interval(10000).subscribe((val) => this.getLatest());
+    this.getDate(this.stockClick(this.tab));
+    interval(10000).subscribe((val) => this.getLatest());
   }
 
   yourFn(event) {
     this.tab = event.tab.textLabel;
-    this.getDate(`sort=${this.tab}`);
+    this.getDate(this.stockClick(this.tab));
   }
 
   CreateChart() {
@@ -54,21 +52,27 @@ export class DataComponent implements OnInit {
           {
             label: "Gebruikt",
             yAxisID: 'Energie',
-            borderColor: "#3e95cd",
+            borderColor: "#004eff",
+            borderWidth: 2,
+            backgroundColor:"#004eff",
             data: this.gebruikt,
             fill: false
           },
           {
             label: "Opgeleverd",
             yAxisID: 'Energie',
-            borderColor: "#8e5ea2",
+            borderColor: "#FF0048",
+            borderWidth: 2,
+            backgroundColor:"#FF0048",
             data: this.opgeleverd,
             fill: false
           },
           {
             label: "Temperatuur",
             yAxisID: 'Tempature',
-            borderColor: "#858585",
+            borderColor: "#d4fb79",
+            borderWidth: 2,
+            backgroundColor:"#d4fb79",
             data: this.temperatuur,
             fill: false
           }
@@ -78,28 +82,38 @@ export class DataComponent implements OnInit {
         animation: false,
         title: {
           display: true,
-          text: `Gemiddeld verbruik per ${this.tab.toLowerCase()} in kWh`
+          text: `Gemiddeld verbruik per ${this.tab.toLowerCase()} in kWh & gemiddelde temperatuur in ºC`
         },
         scales: {
           xAxes: [{
-            display: true
+            display: true,
+            scaleLabel:{
+              display:true,
+              labelString:"Tijd"
+            }
           }],
           yAxes: [{
             display: true,
             id: 'Energie',
-            type: 'linear',
-            position: 'left'
+            position: 'left',
+            scaleLabel:{
+              display:true,
+              labelString:"Energie"
+            }
           },
           {
             display: true,
             id: 'Tempature',
-            type: 'linear',
-            position: 'right'
+            position: 'right',
+            scaleLabel:{
+              display:true,
+              labelString:"Temperatuur"
+            }
           }],
         },
         elements: {
           point: {
-            radius: 1
+            radius: 0.5
           }
         }
       }
@@ -121,7 +135,7 @@ export class DataComponent implements OnInit {
   }
 
   OnClickMe() {
-    this.getDate(`begin=${this.beginDate}&eind=${this.endDate}&sort=${this.tab}`);
+      this.getDate(`begin=${this.beginDate}&eind=${this.endDate}&sort=${this.tab}`);
   }
 
 
@@ -145,7 +159,6 @@ export class DataComponent implements OnInit {
 
     this.httpClient.get<object[]>(this.apiURL + '/meting/202481593119718?' + vars).subscribe((data => {
       data.map(row => this.tempTemperatuur.push(row["InsideTemperature"]));
-      console.log(this.temperatuur.length);
       this.updateChart();
     }))
   }
@@ -159,21 +172,34 @@ export class DataComponent implements OnInit {
   }
 
   updateChart() {
-    if(this.easyCounter==1){
-      this.easyCounter=0;
-      console.log(this.temperatuur.length + ' & ' + this.gebruikt.length);
-      for(let i = this.alldates.length - this.tempTemperatuur.length; i >0;i--){
+    if (this.easyCounter == 1) {
+      this.easyCounter = 0;
+      for (let i = this.alldates.length - this.tempTemperatuur.length; i > 0; i--) {
         this.temperatuur.push(null);
       }
       this.tempTemperatuur.map(row => this.temperatuur.push(row));
-      while(this.tempTemperatuur.length != this.temperatuur.length);{
-      console.log(this.tempTemperatuur.length);
-      console.log(this.temperatuur.length);
-      }
       this.CreateChart();
-
-    }else{
+    } else {
       this.easyCounter++;
     }
   }
+
+  stockClick(mode) {
+    let day1 = new Date();
+    let day2 = new Date();
+    if (mode == "Minuut") {
+      return `begin=${day1}&eind=${day2}&sort=${mode}`
+    } else if (mode == "Uur") {
+      return `begin=${day1}&eind=${day2}&sort=${mode}`;
+    } else if (mode == "Dag") {
+      return `begin=${day1.setDate(day1.getDate() - 7)}&eind=${day2}&sort=${mode}`;
+    } else if (mode == "Maand") {
+      day1.setDate(1)
+      console.log(day1);
+      return `begin=${day1.setDate(1)}&eind=${day2}&sort=${mode}`;
+    } else {
+      return null;
+    }
+  }
 }
+
