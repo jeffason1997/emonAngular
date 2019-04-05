@@ -9,34 +9,38 @@
   <ngx-gauge id="opleveringGauge" type="arch" [value]="opleverValue" label="huidige Oplevering" append="W" [min]="0"
     [max]="5000"></ngx-gauge>
 
-    <p>Totaal verbruik op de meter is {{totaalVerbruik}}kWh en dat voor €{{kostenPer}}/kWh komt uit op €{{totaleKosten}}</p>
+  <p>Totaal verbruik op de meter is {{totaalVerbruik}}kWh en dat voor €{{kostenPer}}/kWh komt uit op €{{totaleKosten}}
+  </p>
 </span>
 
 <span id="dates">
   <span id="begin">
     <p id="beginText">Begin datum</p>
-    <input matInput [min]="minDate" [max]="maxDate" matInput [matDatepicker]="beginPicker" (dateChange)="BeginDateChange($event)"  placeholder="Choose date">
+    <input matInput [min]="minDate" [max]="maxDate" matInput [matDatepicker]="beginPicker"
+      (dateChange)="BeginDateChange($event)" placeholder="Choose date">
     <mat-datepicker-toggle matSuffix [for]="beginPicker"></mat-datepicker-toggle>
     <mat-datepicker #beginPicker></mat-datepicker>
   </span>
 
   <span id="end">
     <p id="endText">Eind datum</p>
-    <input matInput [min]="minDate" [max]="maxDate" matInput [matDatepicker]="endPicker" (dateChange)="EndDateChange($event)"  placeholder="Choose date">
+    <input matInput [min]="minDate" [max]="maxDate" matInput [matDatepicker]="endPicker"
+      (dateChange)="EndDateChange($event)" placeholder="Choose date">
     <mat-datepicker-toggle matSuffix [for]="endPicker"></mat-datepicker-toggle>
     <mat-datepicker #endPicker></mat-datepicker>
-    <button id="buttonYO" (click)="OnClickMe()">Get Data</button>
+    <button id="buttonYO" class="font-small blue text-white bg-primary" (click)="OnClickMe()" style="border:none;">Get
+      Data</button>
   </span>
 </span>
 <mat-tab-group id="tabs" (selectedTabChange)="yourFn($event)" animationDuration="0ms">
-  <mat-tab label="Minuut"> </mat-tab>
-  <mat-tab label="Uur"></mat-tab>
-  <mat-tab label="Dag"></mat-tab>
   <mat-tab label="Maand"></mat-tab>
+  <mat-tab label="Dag"></mat-tab>
+  <mat-tab label="Uur"></mat-tab>
+  <mat-tab label="Minuut"> </mat-tab>
 </mat-tab-group>
 
 <span id="canvasHolder">
-<div *ngIf="chart">
-  <canvas id="canvas" >{{ chart }}</canvas>
-</div>
+  <div *ngIf="chart">
+    <canvas id="canvas">{{ chart }}</canvas>
+  </div>
 </span>
