@@ -16,6 +16,8 @@ export class DataComponent implements OnInit {
   gebruikt = [];
   opgeleverd = [];
   alldates = [];
+  temperatuur = [];
+  easyCounter = 0;
   chart = new Chart("canvas");
   beginDate = this.minDate;
   endDate = this.maxDate;
@@ -50,16 +52,25 @@ export class DataComponent implements OnInit {
         datasets: [
           {
             label: "Gebruikt",
+            yAxisID: 'Energie',
             borderColor: "#3e95cd",
             data: this.gebruikt,
             fill: false
           },
           {
             label: "Opgeleverd",
+            yAxisID: 'Energie',
             borderColor: "#8e5ea2",
             data: this.opgeleverd,
             fill: false
           },
+          {
+            label: "Temperatuur",
+            yAxisID: 'Tempature',
+            borderColor: "#858585",
+            data: this.temperatuur,
+            fill: false
+          }
         ]
       },
       options: {
@@ -73,7 +84,16 @@ export class DataComponent implements OnInit {
             display: true
           }],
           yAxes: [{
-            display: true
+            display: true,
+            id: 'Energie',
+            type: 'linear',
+            position: 'left'
+          },
+          {
+            display: true,
+            id: 'Tempature',
+            type: 'linear',
+            position: 'right'
           }],
         },
         elements: {
@@ -100,8 +120,7 @@ export class DataComponent implements OnInit {
   }
 
   OnClickMe() {
-    this.getDate(`begin=${this.beginDate.toString("dd-MM-YY")}&eind=${this.endDate}&sort=${this.tab}`);
-    console.log("ghettt");
+    this.getDate(`begin=${this.beginDate}&eind=${this.endDate}&sort=${this.tab}`);
   }
 
 
@@ -117,17 +136,36 @@ export class DataComponent implements OnInit {
   getDate(vars = "") {
     this.emptyArray();
     this.httpClient.get<object[]>(this.apiURL + '/energie/4530303035303031363930323834393134?' + vars).subscribe((data => {
-      console.log(data);
       data.map(row => this.gebruikt.push(row["CurrentTo"] / 1000));
       data.map(row => this.opgeleverd.push(row["CurrentFrom"] / 1000));
       data.map(row => this.alldates.push(row["Time"]));
-      this.CreateChart();
+      this.updateChart();
     }));
+
+    this.httpClient.get<object[]>(this.apiURL + '/meting/202481593119718?' + vars).subscribe((data => {
+      for(let i = this.alldates.length - data.length; i >0;i--){
+        this.temperatuur.push(null);
+      }
+      data.map(row => this.temperatuur.push(row["InsideTemperature"]));
+      console.log(this.temperatuur.length);
+      this.updateChart();
+    }))
   }
 
   emptyArray() {
     this.gebruikt = [];
     this.opgeleverd = [];
     this.alldates = [];
+    this.temperatuur = [];
+  }
+
+  updateChart() {
+    if(this.easyCounter==1){
+      this.CreateChart();
+      this.easyCounter=0;
+      console.log(this.temperatuur.length + ' & ' + this.gebruikt.length);
+    }else{
+      this.easyCounter++;
+    }
   }
 }
