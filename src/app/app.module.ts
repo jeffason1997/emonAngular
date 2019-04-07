@@ -11,12 +11,14 @@ import { MatDatepickerModule, MatNativeDateModule, MatInputModule, MatTabsModule
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { NgxGaugeModule } from 'ngx-gauge';
-import {MatGridListModule} from '@angular/material/grid-list';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { SensorsComponent } from './sensors/sensors.component';
 
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
-  { path: 'data', component: DataComponent }
+  { path: 'data', component: DataComponent },
+  { path: 'sensor', component: SensorsComponent }
 ];
 
 
@@ -26,11 +28,12 @@ const appRoutes: Routes = [
     LoginComponent,
     FooterComponent,
     NavbarComponent,
-    DataComponent
+    DataComponent,
+    SensorsComponent
   ],
   imports: [
     BrowserModule,
-    NgxGaugeModule, 
+    NgxGaugeModule,
     MatTabsModule,
     RouterModule.forRoot(
       appRoutes
