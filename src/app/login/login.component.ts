@@ -1,7 +1,6 @@
 import { Component, OnInit} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Tile} from './tile'
-import { MatGridTile } from '@angular/material';
 
 @Component({
   selector: 'app-login',

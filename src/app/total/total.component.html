@@ -1,0 +1,22 @@
+<h1> Gegevens van de meterkast </h1>
+<div (window:resize)="onResize($event)"></div>
+<link href="https://rawgit.com/angular/material2-builds/master/prebuilt-themes/indigo-pink.css" rel="stylesheet">
+<br>
+<span id="gauges">
+  <ngx-gauge id="verbruikGauge" type="arch" thick="5" duration="250" foregroundColor="#61ff00" backgroundColor= "#b2b2b2"  [value]="gaugeValue" label="huidig verbruik" append="W" min="0"
+    max="7500"></ngx-gauge>
+
+  <ngx-gauge id="opleveringGauge" type="arch" thick="5" duration="250" foregroundColor="#61ff00" backgroundColor= "#b2b2b2" [value]="opleverValue" label="huidige Oplevering" append="W" min="0"
+    max="7500"></ngx-gauge>
+
+  <p>Totaal verbruik op de meter is {{totaalVerbruik}}kWh en dat voor €{{kostenPer}}/kWh komt uit op €{{totaleKosten}}
+  </p>
+</span>
+
+<div align="center"><input type="image" src="https://image.flaticon.com/icons/svg/149/149706.svg" (click)="dateMinus()" collor="accent" width="5%" height="5%"/>&nbsp;&nbsp;&nbsp;<input type="image" src="https://image.flaticon.com/icons/svg/109/109526.svg" (click)="datePlus()" collor="accent" width="5%" height="5%"/></div>
+
+<span id="canvasHolder">
+  <div *ngIf="chart">
+    <canvas id="canvas">{{ chart }}</canvas>
+  </div>
+</span>
