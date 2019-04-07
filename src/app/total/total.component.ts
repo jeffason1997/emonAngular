@@ -32,7 +32,7 @@ export class TotalComponent implements OnInit {
   dateMinusCounter = 0;
 
 
-  constructor(private httpClient: HttpClient, activatedRoute: ActivatedRoute) { 
+  constructor(private httpClient: HttpClient, activatedRoute: ActivatedRoute) {
     activatedRoute.queryParams.subscribe(params => {
       this.houseId = params["id"];
       this.httpClient.get<Object[]>(this.apiURL + '/infoVanHuis/' + this.houseId).subscribe((data => {
@@ -149,21 +149,9 @@ export class TotalComponent implements OnInit {
     let totaalGebruikt = 0;
     let totaalOpgeleverd = 0;
     this.httpClient.get<object[]>(this.apiURL + '/energie/' + this.serienummer + '?' + vars).subscribe((data => {
-      data.map(row => {
-        let huidigGebruik = row["CurrentTo"] / 1000.0;
-        totaalGebruikt += huidigGebruik;
-        totaalGebruikt = Math.round(totaalGebruikt * 100) / 100
-        this.gebruikt.push(totaalGebruikt);
-      });
-      data.map(row => { 
-        let huidigOpgeleverd =row["CurrentFrom"] / 1000.0;
-        totaalOpgeleverd += huidigOpgeleverd;
-        totaalOpgeleverd = Math.round(totaalOpgeleverd * 1000) / 1000
-        this.opgeleverd.push(totaalOpgeleverd);
-      });
-      data.map(row => { 
-        this.alldates.push(row["Time"])
-      });
+      data.map(row => { this.gebruikt.push(row["CurrentTo"] / 1000.0); });
+      data.map(row => { this.opgeleverd.push(row["CurrentFrom"] / 1000.0); });
+      data.map(row => { this.alldates.push(row["Time"]) });
       this.updateChart();
     }));
 
@@ -205,7 +193,7 @@ export class TotalComponent implements OnInit {
 
   datePlus() {
     this.dateMinusCounter -= 1;
-    if(this.dateMinusCounter < 0) {
+    if (this.dateMinusCounter < 0) {
       this.dateMinusCounter = 0;
       alert("Dit is de huidige tijd!");
     }
@@ -215,7 +203,7 @@ export class TotalComponent implements OnInit {
   stockClick() {
     this.currentDate = new Date(new Date().setDate(new Date().getDate() - (this.dateMinusCounter * 7)));
     this.beforeDate = new Date(new Date().setDate(this.currentDate.getDate() - 7));
-    return `begin=${this.beforeDate}&eind=${this.currentDate}&sort=Uur`;
+    return `begin=${this.beforeDate}&eind=${this.currentDate}&sort=TotalWeekly`;
   }
 
 }
