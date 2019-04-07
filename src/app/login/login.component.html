@@ -1,11 +1,10 @@
-<mat-grid-list [cols]="4" rowHeight="200px">
-  <mat-grid-tile
-      *ngFor="let tile of tiles"
-      [colspan]="tile.cols"
-      [rowspan]="tile.rows"
+<mat-grid-list [cols]="3"  rowHeight="150px">
+    <mat-grid-tile *ngFor="let tile of tiles" [colspan]="tile.cols" [rowspan]="tile.rows"
       [style.background]="tile.color">
-      <a href="/data?id={{tile.id}}" style="text-decoration: none; color:black;"><div style="padding:10px;border:1px solid black;border-radius: 5px;" (click)="setSelectedHouse(tile.id)">
-    Huis {{tile.id}} van eigenaar: {{tile.eigenaar}}
-      </div></a>
-  </mat-grid-tile>
+      <a href="/data?id={{tile.id}}" style="text-decoration: none; color:black;">
+        <div style="padding:30px;border:1px solid black;border-radius: 5px;" (click)="setSelectedHouse(tile.id)">
+          Huis {{tile.id}} van eigenaar: {{tile.eigenaar}}
+        </div>
+      </a>
+    </mat-grid-tile>
 </mat-grid-list>
