@@ -1,0 +1,43 @@
+#begin, #end {
+    display: inline-block;
+    text-align: center;
+    margin: 25px;
+}
+
+#beginText, #beginPicker{
+    display: inline;
+    margin: 10px;
+}
+
+#endText, #endPicker, #buttonYO{
+    display: inline;
+    margin: 10px;
+}
+
+#verbruikGauge, #opleveringGauge{
+    display: inline-block;
+    margin-left: 50px;
+    margin-right: 50px;
+}
+
+#gauges{
+    display: table;
+    margin: 0 auto;
+}
+
+#dates {
+    display: table;
+    margin: 0 auto;
+}
+
+#tabs {
+    display: table;
+    margin: 0 auto;
+}
+#canvasHolder{
+    height: 60%;
+    width: 80%;
+    display: table;
+    margin: 0 auto;
+    margin-bottom: 50px;
+}

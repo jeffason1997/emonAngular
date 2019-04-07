@@ -7,18 +7,20 @@ import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DataComponent } from './data/data.component';
-import { MatDatepickerModule, MatNativeDateModule, MatInputModule, MatTabsModule } from '@angular/material';
+import { MatDatepickerModule, MatNativeDateModule, MatInputModule, MatTabsModule, MatIconModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { NgxGaugeModule } from 'ngx-gauge';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { SensorsComponent } from './sensors/sensors.component';
+import { TotalComponent } from './total/total.component';
 
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
   { path: 'data', component: DataComponent },
-  { path: 'sensor', component: SensorsComponent }
+  { path: 'sensor', component: SensorsComponent },
+  { path: 'total', component: TotalComponent }
 ];
 
 
@@ -29,7 +31,8 @@ const appRoutes: Routes = [
     FooterComponent,
     NavbarComponent,
     DataComponent,
-    SensorsComponent
+    SensorsComponent,
+    TotalComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,8 @@ const appRoutes: Routes = [
     BrowserAnimationsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    MatGridListModule
+    MatGridListModule,
+    MatIconModule
   ],
   exports: [
     MatDatepickerModule
