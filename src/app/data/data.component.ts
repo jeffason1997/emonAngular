@@ -1,8 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { interval, empty } from 'rxjs';
 import { Chart } from 'chart.js';
-import {LoginComponent} from 'src/app/login/login.component'
+import { LoginComponent } from 'src/app/login/login.component'
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -13,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 
 export class DataComponent implements OnInit {
   houseId = 1;
-  apiURL: string = 'http://188.166.112.138:420/api';
+  apiURL: string = 'http://localhost:420/api';
   serienummer: string = "4530303035303031363930323834393134";
   macaddress: string = "202481593119718";
   maxDate = new Date();
@@ -32,6 +31,7 @@ export class DataComponent implements OnInit {
   kostenPer = 0.23;
   totaleKosten = 0;
   tab = "Minuut";
+  sub;
 
   constructor(private httpClient: HttpClient, activatedRoute: ActivatedRoute) {
     activatedRoute.queryParams.subscribe(params => {
@@ -45,8 +45,9 @@ export class DataComponent implements OnInit {
         }
         this.getLatest();
         this.getDate(this.stockClick(this.tab));
-        interval(10000).subscribe((val) => this.getLatest());
-        }));
+        window.setInterval((val) => this.getLatest(), 10000);
+
+      }));
     });
   }
 
@@ -70,7 +71,7 @@ export class DataComponent implements OnInit {
             yAxisID: 'Energie',
             borderColor: "#004eff",
             borderWidth: 2,
-            backgroundColor:"#004eff",
+            backgroundColor: "#004eff",
             data: this.gebruikt,
             fill: false
           },
@@ -79,7 +80,7 @@ export class DataComponent implements OnInit {
             yAxisID: 'Energie',
             borderColor: "#FF0048",
             borderWidth: 2,
-            backgroundColor:"#FF0048",
+            backgroundColor: "#FF0048",
             data: this.opgeleverd,
             fill: false
           },
@@ -88,7 +89,7 @@ export class DataComponent implements OnInit {
             yAxisID: 'Tempature',
             borderColor: "#d4fb79",
             borderWidth: 2,
-            backgroundColor:"#d4fb79",
+            backgroundColor: "#d4fb79",
             data: this.temperatuur,
             fill: false
           }
@@ -103,27 +104,27 @@ export class DataComponent implements OnInit {
         scales: {
           xAxes: [{
             display: true,
-            scaleLabel:{
-              display:true,
-              labelString:"Tijd"
+            scaleLabel: {
+              display: true,
+              labelString: "Tijd"
             }
           }],
           yAxes: [{
             display: true,
             id: 'Energie',
             position: 'left',
-            scaleLabel:{
-              display:true,
-              labelString:"Energie"
+            scaleLabel: {
+              display: true,
+              labelString: "Energie"
             }
           },
           {
             display: true,
             id: 'Tempature',
             position: 'right',
-            scaleLabel:{
-              display:true,
-              labelString:"Temperatuur"
+            scaleLabel: {
+              display: true,
+              labelString: "Temperatuur"
             }
           }],
         },
@@ -151,7 +152,7 @@ export class DataComponent implements OnInit {
   }
 
   OnClickMe() {
-      this.getDate(`begin=${this.beginDate}&eind=${this.endDate}&sort=${this.tab}`);
+    this.getDate(`begin=${this.beginDate}&eind=${this.endDate}&sort=${this.tab}`);
   }
 
 
@@ -173,7 +174,7 @@ export class DataComponent implements OnInit {
       this.updateChart();
     }));
 
-    this.httpClient.get<object[]>(this.apiURL + '/meting/'+ + this.macaddress + '?' + vars).subscribe((data => {
+    this.httpClient.get<object[]>(this.apiURL + '/meting/' + this.macaddress + '?' + vars).subscribe((data => {
       data.map(row => this.tempTemperatuur.push(row["InsideTemperature"]));
       this.updateChart();
     }))

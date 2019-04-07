@@ -6,19 +6,17 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { FooterComponent } from './footer/footer.component';
 import { NavbarComponent } from './navbar/navbar.component';
-import { RegisterComponent } from './register/register.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DataComponent } from './data/data.component';
 import { MatDatepickerModule, MatNativeDateModule, MatInputModule, MatTabsModule } from '@angular/material';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { NgxGaugeModule } from 'ngx-gauge';
-import {MatGridListModule} from '@angular/material/grid-list'
+import {MatGridListModule} from '@angular/material/grid-list';
 
 
 const appRoutes: Routes = [
   { path: '', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
   { path: 'data', component: DataComponent }
 ];
 
@@ -29,8 +27,7 @@ const appRoutes: Routes = [
     LoginComponent,
     FooterComponent,
     NavbarComponent,
-    RegisterComponent,
-    DataComponent,
+    DataComponent
   ],
   imports: [
     BrowserModule,
