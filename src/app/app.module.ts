@@ -13,6 +13,7 @@ import { MatDatepickerModule, MatNativeDateModule, MatInputModule, MatTabsModule
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { HttpClientModule } from '@angular/common/http'
 import { NgxGaugeModule } from 'ngx-gauge';
+import {MatGridListModule} from '@angular/material/grid-list'
 
 
 const appRoutes: Routes = [
@@ -45,7 +46,8 @@ const appRoutes: Routes = [
     FormsModule,
     BrowserAnimationsModule,
     ReactiveFormsModule,
-    HttpClientModule
+    HttpClientModule,
+    MatGridListModule
   ],
   exports: [
     MatDatepickerModule

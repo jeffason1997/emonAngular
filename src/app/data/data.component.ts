@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { interval, empty } from 'rxjs';
 import { Chart } from 'chart.js';
+import {LoginComponent} from 'src/app/login/login.component'
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-data',
   templateUrl: './data.component.html',
@@ -9,7 +12,10 @@ import { Chart } from 'chart.js';
 })
 
 export class DataComponent implements OnInit {
+  houseId = 1;
   apiURL: string = 'http://188.166.112.138:420/api';
+  serienummer: string = "4530303035303031363930323834393134";
+  macaddress: string = "202481593119718";
   maxDate = new Date();
   gebruikt = [];
   opgeleverd = [];
@@ -27,14 +33,24 @@ export class DataComponent implements OnInit {
   totaleKosten = 0;
   tab = "Minuut";
 
-  constructor(private httpClient: HttpClient) {
-
-    this.getLatest();
+  constructor(private httpClient: HttpClient, activatedRoute: ActivatedRoute) {
+    activatedRoute.queryParams.subscribe(params => {
+      this.houseId = params["id"];
+      this.httpClient.get<Object[]>(this.apiURL + '/infoVanHuis/' + this.houseId).subscribe((data => {
+        try {
+          this.serienummer = data[0]["serienummer"];
+          this.macaddress = data[0]["mac_adres"];
+        } catch {
+          alert("Kan geen mac adres en serienummer ophalen, de standaard zal nu gebruikt worden");
+        }
+        this.getLatest();
+        this.getDate(this.stockClick(this.tab));
+        interval(10000).subscribe((val) => this.getLatest());
+        }));
+    });
   }
 
   ngOnInit() {
-    this.getDate(this.stockClick(this.tab));
-    interval(10000).subscribe((val) => this.getLatest());
   }
 
   yourFn(event) {
@@ -140,7 +156,7 @@ export class DataComponent implements OnInit {
 
 
   getLatest() {
-    this.httpClient.get<Object[]>(this.apiURL + '/newEnergie/4530303035303031363930323834393134').subscribe((data => {
+    this.httpClient.get<Object[]>(this.apiURL + '/newEnergie/' + this.serienummer).subscribe((data => {
       this.gaugeValue = data[0]["verbruik"];
       this.opleverValue = data[0]["opgeleverd"];
       this.totaalVerbruik = Math.round((data[0]["opgenomen_tarief_1"] + data[0]["opgenomen_tarief_2"]) * 100) / 100;
@@ -150,14 +166,14 @@ export class DataComponent implements OnInit {
 
   getDate(vars = "") {
     this.emptyArray();
-    this.httpClient.get<object[]>(this.apiURL + '/energie/4530303035303031363930323834393134?' + vars).subscribe((data => {
+    this.httpClient.get<object[]>(this.apiURL + '/energie/' + this.serienummer + '?' + vars).subscribe((data => {
       data.map(row => this.gebruikt.push(row["CurrentTo"] / 1000));
       data.map(row => this.opgeleverd.push(row["CurrentFrom"] / 1000));
       data.map(row => this.alldates.push(row["Time"]));
       this.updateChart();
     }));
 
-    this.httpClient.get<object[]>(this.apiURL + '/meting/202481593119718?' + vars).subscribe((data => {
+    this.httpClient.get<object[]>(this.apiURL + '/meting/'+ + this.macaddress + '?' + vars).subscribe((data => {
       data.map(row => this.tempTemperatuur.push(row["InsideTemperature"]));
       this.updateChart();
     }))
