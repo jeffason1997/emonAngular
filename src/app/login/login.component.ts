@@ -12,7 +12,7 @@ import { MatGridTile } from '@angular/material';
 export class LoginComponent implements OnInit {
 
   tiles: Tile[] = new Array();
-  apiURL: string = 'http://localhost:420/api';
+  apiURL: string = 'http://188.166.112.138:420/api';
   selectedHouse = null;
 
   constructor(private httpClient: HttpClient) { }

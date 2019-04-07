@@ -12,7 +12,7 @@ import { ActivatedRoute } from '@angular/router';
 
 export class DataComponent implements OnInit {
   houseId = 1;
-  apiURL: string = 'http://localhost:420/api';
+  apiURL: string = 'http://188.166.112.138:420/api';
   serienummer: string = "4530303035303031363930323834393134";
   macaddress: string = "202481593119718";
   maxDate = new Date();
